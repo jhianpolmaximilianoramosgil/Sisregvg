@@ -1,0 +1,91 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Listado de Persona</title>
+        <f:event listener="#{personaC.listar()}" type="preRenderView" />
+    </h:head>
+    <h:body>      
+
+        <p:growl id="growl" showDetail="true" />
+        <p:growl id="growl-sticky" for="sticky-key" showDetail="true" sticky="true" />
+
+        <h:form>
+            <!--dni_per nom_per  nac_per  tel_per asig_mes   mes_per   obs_per  cod_ubi sex_per-->
+
+            <!--        Formulario del Personero    >-->         
+            <p:panelGrid columns="2">
+
+                <p:outputLabel value="Nombre" /> <p:inputText value="#{personaC.per.nombre}" maxlength="30" />
+                <p:outputLabel value="Apellido" /> <p:inputText value="#{personaC.per.apellido}" maxlength="30" />               
+                <p:outputLabel value="Dni" /> <p:inputText value="#{personaC.per.dni}" maxlength="8" >
+                    <p:keyFilter regEx="/[0-8]/" />
+                </p:inputText>
+                <p:outputLabel value="Celular" /> <p:inputText value="#{personaC.per.celular}" maxlength="9" >
+                    <p:keyFilter regEx="/[0-9]/" />
+                </p:inputText>
+                <p:outputLabel value="email" /> <p:inputText value="#{personaC.per.email}" maxlength="50" />
+                <p:outputLabel value="cargo" /> <p:inputText value="#{personaC.per.cargo}" />
+                <p:outputLabel value="Sexo" /><p:selectOneRadio id="sexo" value="#{personaC.per.sexo}" >
+                    <f:selectItem itemLabel="Masculino" itemValue="M" />
+                    <f:selectItem itemLabel="Femenino" itemValue="F" />
+                </p:selectOneRadio>
+                <p:commandButton value="Registrar" actionListener="#{personaC.registrar()}" update="tablaPer"/>
+
+            </p:panelGrid>
+
+            <!--        Formulario del Personero    >-->
+
+            <!--  Listado del Personero -->
+            <p:dataTable var="pers" id="tablaPer" value="#{personaC.listadoPer}" rows="10"
+                         paginator="true"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+                         rowsPerPageTemplate="5,10,{ShowAll|'All'}" >
+
+
+<!--                <p:column headerText="Codigo">
+                    <h:outputText value="#{per.codigo}" />
+                </p:column>-->
+
+                <p:column headerText="Nombre">
+                    <h:outputText value="#{personaC.per.nombre}" />
+                </p:column>
+
+                <p:column headerText="Apellido">
+                    <h:outputText value="#{personaC.per.apellid}" />
+                </p:column>
+
+                <p:column headerText="Dni">
+                    <h:outputText value="#{personaC.per.dni}" />
+                </p:column>
+
+                <p:column headerText="Celular">
+                    <h:outputText value="#{personaC.per.celular}" />
+                </p:column>
+
+                <p:column headerText="Email">
+                    <h:outputText value="#{personaC.per.email}" />
+                </p:column>
+
+                <p:column headerText="Sexo">
+                    <h:outputText value="#{personaC.per.sexo}" />
+                </p:column>
+
+                <p:column headerText="Cargo">
+                    <h:outputText value="#{personaC.per.cargo}" />
+                </p:column>
+
+
+
+                <p:column exportable="false">
+                    <p:commandButton icon="pi pi-pencil" styleClass="edit-button rounded-button ui-button-success" />
+                    <p:commandButton class="ui-button-warning rounded-button" icon="pi pi-trash" />  
+                </p:column>
+            </p:dataTable>
+
+        </h:form>
+    </h:body>
+</html>
+
