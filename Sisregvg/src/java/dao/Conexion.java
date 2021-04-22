@@ -33,8 +33,12 @@ public class Conexion {
         }
     }
     
-    public static void main(String[] args) throws Exception{
+   public static void main(String[] args) throws Exception{
         Conexion.conectar();
-        if (Conexion.cnx != null) System.out.println("Estoy conectado");
+        if (Conexion.cnx != null) {
+            System.out.println("CONECTADO");
+        } else {
+            System.out.println("SIN CONEXIÓN REVISA...");
+        }
     }
 }

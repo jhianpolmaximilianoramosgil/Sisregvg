@@ -1,8 +1,11 @@
 package dao;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import java.util.List;
@@ -17,6 +20,8 @@ public class PersonaD extends Conexion implements ICRUD<PersonaM> {
         try {
             PreparedStatement ps = this.conectar().prepareStatement(sql);
             ps.setString(1, per.getNombre());
+//           SimpleDateFormat forma = new SimpleDateFormat("dd/MM/yy");
+//            ps.setString(3, forma.format(per.getNacimiento()));        
             ps.setString(2, per.getApellido());
             ps.setString(3, per.getDni());
             ps.setString(4, per.getCelular());
@@ -26,7 +31,7 @@ public class PersonaD extends Conexion implements ICRUD<PersonaM> {
             ps.executeUpdate();
             ps.close();
         } catch (Exception e) {
-            System.out.println("Error al Ingresar Personero Dao " + e.getMessage());
+            System.out.println("Error al Ingresar Persona Dao " + e.getMessage());
         } finally {
             this.cerrar();
         }
@@ -48,13 +53,23 @@ public class PersonaD extends Conexion implements ICRUD<PersonaM> {
             ps.executeUpdate();
             ps.close();
         } catch (Exception e) {
-            System.out.println("Error al Modificar Persona: " + e.getMessage());
+            System.out.println("Error al Modificar PersonaD: " + e.getMessage());
         }
     }
 
     @Override
-    public void eliminar(int codigo) throws Exception {
-        String sql = "delete from PERSONA where IDPER=?";
+    public void eliminar(PersonaM per) throws Exception {
+        String sql = "delete from PERSONA where CODPER=?";
+         try {
+            PreparedStatement ps = this.conectar().prepareStatement(sql);             
+            ps.setInt(1, per.getCodigo());
+            ps.executeUpdate();
+            ps.close();
+        } catch (Exception e) {
+            System.out.println("Error en eliminarD" + e.getMessage());
+        } finally {
+            this.cerrar();
+        }
     }
     // dni_per nom_per   nac_per  tel_per asig_mes   mes_per   obs_per
 
@@ -62,7 +77,7 @@ public class PersonaD extends Conexion implements ICRUD<PersonaM> {
     public List listarTodos() throws Exception {
         List<PersonaM> listado = null;
         PersonaM per;
-        String sql = "select * from PERSONA";
+        String sql = "select * from PERSONAM";
         try {
             listado = new ArrayList();
             Statement st = this.conectar().createStatement();
@@ -84,7 +99,7 @@ public class PersonaD extends Conexion implements ICRUD<PersonaM> {
             st.close();
 
         } catch (Exception e) {
-            System.out.println("Error en listarTodos Dao" + e.getMessage());
+            System.out.println("Error en listarTodosD:" + e.getMessage());
         } finally {
             this.cerrar();
         }

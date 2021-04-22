@@ -1,91 +1,149 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
     <h:head>
         <title>Listado de Persona</title>
         <f:event listener="#{personaC.listar()}" type="preRenderView" />
     </h:head>
     <h:body>      
 
-        <p:growl id="growl" showDetail="true" />
+        <p:growl id="mensaje" showDetail="true" />
         <p:growl id="growl-sticky" for="sticky-key" showDetail="true" sticky="true" />
 
-        <h:form>
+        <h:form id="form">
             <!--dni_per nom_per  nac_per  tel_per asig_mes   mes_per   obs_per  cod_ubi sex_per-->
 
             <!--        Formulario del Personero    >-->         
             <p:panelGrid columns="2">
-
                 <p:outputLabel value="Nombre" /> <p:inputText value="#{personaC.per.nombre}" maxlength="30" />
-                <p:outputLabel value="Apellido" /> <p:inputText value="#{personaC.per.apellido}" maxlength="30" />               
-                <p:outputLabel value="Dni" /> <p:inputText value="#{personaC.per.dni}" maxlength="8" >
+                <p:outputLabel value="Apellido" /> <p:inputText value="#{personaC.per.apellido}" maxlength="30" />
+                <p:outputLabel value="DNI" /> <p:inputText value="#{personaC.per.dni}" maxlength="8" >
                     <p:keyFilter regEx="/[0-8]/" />
                 </p:inputText>
                 <p:outputLabel value="Celular" /> <p:inputText value="#{personaC.per.celular}" maxlength="9" >
                     <p:keyFilter regEx="/[0-9]/" />
                 </p:inputText>
                 <p:outputLabel value="email" /> <p:inputText value="#{personaC.per.email}" maxlength="50" />
-                <p:outputLabel value="cargo" /> <p:inputText value="#{personaC.per.cargo}" />
                 <p:outputLabel value="Sexo" /><p:selectOneRadio id="sexo" value="#{personaC.per.sexo}" >
                     <f:selectItem itemLabel="Masculino" itemValue="M" />
                     <f:selectItem itemLabel="Femenino" itemValue="F" />
-                </p:selectOneRadio>
-                <p:commandButton value="Registrar" actionListener="#{personaC.registrar()}" update="tablaPer"/>
+                </p:selectOneRadio>              
+                <p:outputLabel value="Cargo" /> <p:inputText value="#{personaC.per.cargo}" maxlength="30" />
 
+                <p:commandButton value="Registrar" actionListener="#{personaC.registrar()}" update="tablaPer mensaje"/>
+                <!--<p:commandButton value="Listar" actionListener="#{personaC.listar()}" update="tablaPer" />-->
             </p:panelGrid>
-
             <!--        Formulario del Personero    >-->
 
             <!--  Listado del Personero -->
-            <p:dataTable var="pers" id="tablaPer" value="#{personaC.listadoPer}" rows="10"
+            <p:dataTable var="pers" id="tablaPer" value="#{personaC.listadoPer}" rows="10" 
                          paginator="true"
                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                          currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
                          rowsPerPageTemplate="5,10,{ShowAll|'All'}" >
-
-
-<!--                <p:column headerText="Codigo">
-                    <h:outputText value="#{per.codigo}" />
-                </p:column>-->
+                <p:column headerText="Codigo">
+                    <h:outputText value="#{pers.codigo}" />
+                </p:column>
 
                 <p:column headerText="Nombre">
-                    <h:outputText value="#{personaC.per.nombre}" />
+                    <h:outputText value="#{pers.nombre}" />
                 </p:column>
 
                 <p:column headerText="Apellido">
-                    <h:outputText value="#{personaC.per.apellid}" />
+                    <h:outputText value="#{pers.apellido}" />
                 </p:column>
 
                 <p:column headerText="Dni">
-                    <h:outputText value="#{personaC.per.dni}" />
+                    <h:outputText value="#{pers.dni}" />
                 </p:column>
 
                 <p:column headerText="Celular">
-                    <h:outputText value="#{personaC.per.celular}" />
+                    <h:outputText value="#{pers.celular}" />
                 </p:column>
+
 
                 <p:column headerText="Email">
-                    <h:outputText value="#{personaC.per.email}" />
+                    <h:outputText value="#{pers.email}" />
                 </p:column>
+
 
                 <p:column headerText="Sexo">
-                    <h:outputText value="#{personaC.per.sexo}" />
-                </p:column>
+                    <h:outputText value="#{pers.sexo}" >
+                        <f:converter converterId="sexoConverter"/>
+                    </h:outputText>
+                </p:column>  
 
                 <p:column headerText="Cargo">
-                    <h:outputText value="#{personaC.per.cargo}" />
+                    <h:outputText value="#{pers.cargo}" />
                 </p:column>
 
-
-
-                <p:column exportable="false">
-                    <p:commandButton icon="pi pi-pencil" styleClass="edit-button rounded-button ui-button-success" />
-                    <p:commandButton class="ui-button-warning rounded-button" icon="pi pi-trash" />  
+                <p:column headerText="Modificar">
+<!--                    <p:commandButton oncomplete="PF('wdlgDatos').show();" value="Modificar" update=":dlgDatos">
+                        <f:setPropertyActionListener value="#{tblpers}" target="#{personaC.per}" />
+                    </p:commandButton>-->
+                    <p:commandButton value="Modificar" actionListener="#{personaC.modificar()}" update="tablaPer"/>
+                </p:column> 
+                
+                
+                <p:column headerText="Eliminar">
+                    <p:commandButton value="E" icon="ui_icon_trash" actionListener="#{personaC.eliminar(tblpers)}" update="tablaPer">
+                        <p:confirm header="Confirmación" message="¿Deseas eliminar?" icon="ui_icon_trash"/>
+                    </p:commandButton>                 
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+                    </p:confirmDialog> 
                 </p:column>
+                
+                
+
+                <f:facet name="footer">
+                    EN TOTAL HAY #{fn:length(personaC.listadoPer)} REGISTROS.
+                </f:facet>
             </p:dataTable>
+            <!--  Listado del Personero -->
 
         </h:form>
+        <p:dialog header="Datos de Persa" widgetVar="wdlgDatos" id="dlgDatos">
+            <p:panelGrid columns="2">
+
+                <p:outputLabel value="Nombre" /> <p:inputText value="#{personaC.per.nombre}" maxlength="30" />
+                <p:outputLabel value="Apellido" /> <p:inputText value="#{personaC.per.apellido}" maxlength="30" />
+                <p:outputLabel value="DNI" /> <p:inputText value="#{personaC.per.dni}" maxlength="8" >
+                    <p:keyFilter regEx="/[0-8]/" />
+                </p:inputText>    
+
+                <p:outputLabel value="Celular" /> <p:inputText value="#{personaC.per.celular}" maxlength="9" >
+                    <p:keyFilter regEx="/[0-9]/" />
+                </p:inputText>
+
+                <p:outputLabel value="Email" /> <p:inputText value="#{personaC.per.email}" maxlength="50" />
+
+
+                <p:outputLabel value="Sexo" /><p:selectOneRadio id="sexo" value="#{personaC.per.sexo}" >
+                    <f:selectItem itemLabel="Masculino" itemValue="M" />
+                    <f:selectItem itemLabel="Femenino" itemValue="F" />
+                </p:selectOneRadio>
+
+                <p:outputLabel value="Cargo" /> <p:inputText value="#{personaC.per.cargo}" maxlength="30" />
+
+                <p:commandButton value="Cancelar" immediate="true" oncomplete="PF('wdlgDatos').hide();" />
+
+                <p:commandButton value="Modificar" actionListener="#{personaC.modificar()}" 
+                                 update=":form:tablaPer" oncomplete="PF('wdlgDatos').hide();" >
+                    <p:confirm header="Confirmación" message="¿Deseas Modificar?" icon="ui-icon-alert"/>
+                    <p:tooltip trackMouse="true"/>
+                </p:commandButton>
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                    <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+                </p:confirmDialog>
+            </p:panelGrid>
+
+        </p:dialog>
+
     </h:body>
 </html>
-

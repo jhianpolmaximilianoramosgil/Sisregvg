@@ -9,6 +9,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import modelo.PersonaM;
 
+
 @Named(value = "personaC")
 @SessionScoped
 public class PersonaC implements Serializable {
@@ -29,10 +30,33 @@ public class PersonaC implements Serializable {
             limpiar();
             listar();
         } catch (Exception e) {
-
+            System.out.println("Error en registrarC " + e.getMessage());
         }
     }
 
+      public void modificar() throws Exception {
+        try {
+            dao.modificar(per);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "OK", "Modificado con éxito"));
+            limpiar();
+            listar();
+        } catch (Exception e) {
+            System.out.println("Error en modificarC " + e.getMessage());
+        }
+    }
+    
+     public void eliminar(PersonaM pers) throws Exception{
+        try {            
+            dao.eliminar(pers);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "OK", "Eliminado con éxito"));
+            limpiar();
+            listar();
+        } catch (Exception e) {
+            System.out.println("Error en eliminarC " + e.getMessage());
+        }
+    }
+      
+     
     public void limpiar() {
         per = new PersonaM();
     }
@@ -41,12 +65,13 @@ public class PersonaC implements Serializable {
         try {
             listadoPer = dao.listarTodos();
         } catch (Exception e) {
-
+            System.out.println("Error en listarC " + e.getMessage());
         }
     }
 
     
     //Gnerado
+
     public PersonaM getPer() {
         return per;
     }
@@ -70,5 +95,5 @@ public class PersonaC implements Serializable {
     public void setListadoPer(List<PersonaM> listadoPer) {
         this.listadoPer = listadoPer;
     }
-
+  
 }
