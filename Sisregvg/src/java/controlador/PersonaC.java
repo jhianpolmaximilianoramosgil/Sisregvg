@@ -47,7 +47,7 @@ public class PersonaC implements Serializable {
     
      public void eliminar(PersonaM pers) throws Exception{
         try {            
-            dao.eliminar(pers);
+            dao.eliminar(per);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "OK", "Eliminado con éxito"));
             limpiar();
             listar();

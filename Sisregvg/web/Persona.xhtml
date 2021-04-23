@@ -36,14 +36,18 @@
                 <p:commandButton value="Registrar" actionListener="#{personaC.registrar()}" update="tablaPer mensaje"/>
                 <!--<p:commandButton value="Listar" actionListener="#{personaC.listar()}" update="tablaPer" />-->
             </p:panelGrid>
-            <!--        Formulario del Personero    >-->
+            <!--        Formulario del Persona   >-->
 
-            <!--  Listado del Personero -->
+            <!--  Listado del Persona -->
             <p:dataTable var="pers" id="tablaPer" value="#{personaC.listadoPer}" rows="10" 
                          paginator="true"
                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                          currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
                          rowsPerPageTemplate="5,10,{ShowAll|'All'}" >
+                
+                <f:facet name="header"> Listado de Persona </f:facet>
+
+                
                 <p:column headerText="Codigo">
                     <h:outputText value="#{pers.codigo}" />
                 </p:column>
@@ -80,14 +84,15 @@
                     <h:outputText value="#{pers.cargo}" />
                 </p:column>
 
+      
                 <p:column headerText="Modificar">
-<!--                    <p:commandButton oncomplete="PF('wdlgDatos').show();" value="Modificar" update=":dlgDatos">
-                        <f:setPropertyActionListener value="#{tblpers}" target="#{personaC.per}" />
-                    </p:commandButton>-->
+                    <!--                    <p:commandButton oncomplete="PF('wdlgDatos').show();" value="Modificar" update=":dlgDatos">
+                                            <f:setPropertyActionListener value="#{tblpers}" target="#{personaC.per}" />
+                                        </p:commandButton>-->
                     <p:commandButton value="Modificar" actionListener="#{personaC.modificar()}" update="tablaPer"/>
                 </p:column> 
-                
-                
+
+
                 <p:column headerText="Eliminar">
                     <p:commandButton value="E" icon="ui_icon_trash" actionListener="#{personaC.eliminar(tblpers)}" update="tablaPer">
                         <p:confirm header="Confirmación" message="¿Deseas eliminar?" icon="ui_icon_trash"/>
@@ -97,8 +102,8 @@
                         <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
                     </p:confirmDialog> 
                 </p:column>
-                
-                
+
+
 
                 <f:facet name="footer">
                     EN TOTAL HAY #{fn:length(personaC.listadoPer)} REGISTROS.
@@ -121,6 +126,16 @@
                 </p:inputText>
 
                 <p:outputLabel value="Email" /> <p:inputText value="#{personaC.per.email}" maxlength="50" />
+
+                <!--                <table border="1">
+                                    <tr bgcolor="red">
+                                        <td>No</td>
+                                        <td>Nombre</td>
+                                        <td>Apellido</td>
+                                        <td>Dni</td>
+                                    </tr>
+                
+                                </table>-->
 
 
                 <p:outputLabel value="Sexo" /><p:selectOneRadio id="sexo" value="#{personaC.per.sexo}" >

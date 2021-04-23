@@ -7,7 +7,7 @@ import java.sql.DriverManager;
 
 public class Conexion {
 
-    public static Connection cnx = null;
+    private static Connection cnx = null;
 
     public static Connection conectar() throws Exception {
 
@@ -25,6 +25,14 @@ public class Conexion {
             System.out.println("Error de conexión: " + e.getMessage() + e.getStackTrace());
         }
         return cnx;
+    }
+
+    public static Connection getCnx() {
+        return cnx;
+    }
+
+    public static void setCnx(Connection aCnx) {
+        cnx = aCnx;
     }
     
     public void cerrar() throws Exception{
