@@ -4,146 +4,178 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
     <h:head>
         <title>Listado de Persona</title>
         <f:event listener="#{personaC.listar()}" type="preRenderView" />
     </h:head>
     <h:body>      
 
+
+
         <p:growl id="mensaje" showDetail="true" />
         <p:growl id="growl-sticky" for="sticky-key" showDetail="true" sticky="true" />
 
         <h:form id="form">
-            <!--dni_per nom_per  nac_per  tel_per asig_mes   mes_per   obs_per  cod_ubi sex_per-->
-
-            <!--        Formulario del Personero    >-->         
-            <p:panelGrid columns="2">
-                <p:outputLabel value="Nombre" /> <p:inputText value="#{personaC.per.nombre}" maxlength="30" />
-                <p:outputLabel value="Apellido" /> <p:inputText value="#{personaC.per.apellido}" maxlength="30" />
-                <p:outputLabel value="DNI" /> <p:inputText value="#{personaC.per.dni}" maxlength="8" >
-                    <p:keyFilter regEx="/[0-8]/" />
-                </p:inputText>
-                <p:outputLabel value="Celular" /> <p:inputText value="#{personaC.per.celular}" maxlength="9" >
-                    <p:keyFilter regEx="/[0-9]/" />
-                </p:inputText>
-                <p:outputLabel value="email" /> <p:inputText value="#{personaC.per.email}" maxlength="50" />
-                <p:outputLabel value="Sexo" /><p:selectOneRadio id="sexo" value="#{personaC.per.sexo}" >
-                    <f:selectItem itemLabel="Masculino" itemValue="M" />
-                    <f:selectItem itemLabel="Femenino" itemValue="F" />
-                </p:selectOneRadio>              
-                <p:outputLabel value="Cargo" /> <p:inputText value="#{personaC.per.cargo}" maxlength="30" />
-
-                <p:commandButton value="Registrar" actionListener="#{personaC.registrar()}" update="tablaPer mensaje"/>
-                <!--<p:commandButton value="Listar" actionListener="#{personaC.listar()}" update="tablaPer" />-->
-            </p:panelGrid>
-            <!--        Formulario del Persona   >-->
-
-            <!--  Listado del Persona -->
-            <p:dataTable var="pers" id="tablaPer" value="#{personaC.listadoPer}" rows="10" 
-                         paginator="true"
-                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                         currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
-                         rowsPerPageTemplate="5,10,{ShowAll|'All'}" >
-                
-                <f:facet name="header"> Listado de Persona </f:facet>
-
-                
-                <p:column headerText="Codigo">
-                    <h:outputText value="#{pers.codigo}" />
-                </p:column>
-
-                <p:column headerText="Nombre">
-                    <h:outputText value="#{pers.nombre}" />
-                </p:column>
-
-                <p:column headerText="Apellido">
-                    <h:outputText value="#{pers.apellido}" />
-                </p:column>
-
-                <p:column headerText="Dni">
-                    <h:outputText value="#{pers.dni}" />
-                </p:column>
-
-                <p:column headerText="Celular">
-                    <h:outputText value="#{pers.celular}" />
-                </p:column>
 
 
-                <p:column headerText="Email">
-                    <h:outputText value="#{pers.email}" />
-                </p:column>
-
-
-                <p:column headerText="Sexo">
-                    <h:outputText value="#{pers.sexo}" >
-                        <f:converter converterId="sexoConverter"/>
-                    </h:outputText>
-                </p:column>  
-
-                <p:column headerText="Cargo">
-                    <h:outputText value="#{pers.cargo}" />
-                </p:column>
-
-      
-                <p:column headerText="Modificar">
-                    <!--                    <p:commandButton oncomplete="PF('wdlgDatos').show();" value="Modificar" update=":dlgDatos">
-                                            <f:setPropertyActionListener value="#{tblpers}" target="#{personaC.per}" />
-                                        </p:commandButton>-->
-                    <p:commandButton value="Modificar" actionListener="#{personaC.modificar()}" update="tablaPer"/>
-                </p:column> 
-
-
-                <p:column headerText="Eliminar">
-                    <p:commandButton value="E" icon="ui_icon_trash" actionListener="#{personaC.eliminar(tblpers)}" update="tablaPer">
-                        <p:confirm header="Confirmación" message="¿Deseas eliminar?" icon="ui_icon_trash"/>
-                    </p:commandButton>                 
-                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
-                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
-                    </p:confirmDialog> 
-                </p:column>
-
-
-
-                <f:facet name="footer">
-                    EN TOTAL HAY #{fn:length(personaC.listadoPer)} REGISTROS.
-                </f:facet>
-            </p:dataTable>
-            <!--  Listado del Personero -->
-
-        </h:form>
-        <p:dialog header="Datos de Persa" widgetVar="wdlgDatos" id="dlgDatos">
+            <!--        Formulario de la persona    >-->         
             <p:panelGrid columns="2">
 
-                <p:outputLabel value="Nombre" /> <p:inputText value="#{personaC.per.nombre}" maxlength="30" />
-                <p:outputLabel value="Apellido" /> <p:inputText value="#{personaC.per.apellido}" maxlength="30" />
+                <f:facet name= "header"> REGISTRO DE PERSONA </f:facet> 
+
+                <p:outputLabel value="Nombre" />
+                <p:inputText id="Txtnombre" value="#{personaC.per.nombre}" maxlength="30">
+                    <p:keyFilter regEx="/[A-Z_a-z_ñ_á_é_í_ó_ú_ ]/"/>
+<!--                    <p:messages for="Txtnombre"/>-->
+                </p:inputText>
+
+
+                <p:outputLabel value="Apellido" />
+                <p:inputText value="#{personaC.per.apellido}" maxlength="30">
+                    <p:keyFilter regEx="/[A-Z_a-z_ñ_á_é_í_ó_ú_ ]/"/>
+                </p:inputText>
+
                 <p:outputLabel value="DNI" /> <p:inputText value="#{personaC.per.dni}" maxlength="8" >
                     <p:keyFilter regEx="/[0-8]/" />
-                </p:inputText>    
+                </p:inputText>                  
 
                 <p:outputLabel value="Celular" /> <p:inputText value="#{personaC.per.celular}" maxlength="9" >
                     <p:keyFilter regEx="/[0-9]/" />
+                </p:inputText>  
+
+                <p:outputLabel value="Email" />
+                <p:inputText value="#{personaC.per.email}" maxlength="50">
+                    <p:keyFilter regEx="/[A-Z_a-z_ñ_á_é_í_ó_ú_0_:_@_._-]/"/>
                 </p:inputText>
-
-                <p:outputLabel value="Email" /> <p:inputText value="#{personaC.per.email}" maxlength="50" />
-
-                <!--                <table border="1">
-                                    <tr bgcolor="red">
-                                        <td>No</td>
-                                        <td>Nombre</td>
-                                        <td>Apellido</td>
-                                        <td>Dni</td>
-                                    </tr>
-                
-                                </table>-->
-
 
                 <p:outputLabel value="Sexo" /><p:selectOneRadio id="sexo" value="#{personaC.per.sexo}" >
                     <f:selectItem itemLabel="Masculino" itemValue="M" />
                     <f:selectItem itemLabel="Femenino" itemValue="F" />
                 </p:selectOneRadio>
 
-                <p:outputLabel value="Cargo" /> <p:inputText value="#{personaC.per.cargo}" maxlength="30" />
+                <p:outputLabel value="Cargo" />
+                <p:inputText value="#{personaC.per.cargo}" maxlength="30">
+                    <p:keyFilter regEx="/[A-Z_a-z_ñ_á_é_í_ó_ú_ ]/"/>
+                </p:inputText>
+
+                <p:commandButton value="Registrar" actionListener="#{personaC.registrar()}" update="tablaPer mensaje"/>
+                <!--<p:commandButton value="Listar" actionListener="{personeroC.listar()}" update="tablaPer" />-->
+            </p:panelGrid>
+            <!--        Formulario de la persona   >-->
+
+
+
+
+            <!--              Listado de la persona-->
+
+            <p:dataTable var="tblpers" id="tablaPer" value="#{personaC.listadoPer}" rows="10" 
+                         paginator="true"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+                         rowsPerPageTemplate="5,10,{ShowAll|'All'}" 
+                         rowStyleClass="registroVinculado">
+
+                <f:facet name= "header"> LISTADO DE PERSONA  </f:facet> 
+
+                <p:column headerText="Codigo">
+                    <h:outputText value="#{tblpers.codigo}"/>
+                </p:column>
+
+                <p:column headerText="Nombre">
+                    <h:outputText value="#{tblpers.nombre}" />
+                </p:column>
+
+                <p:column headerText="Apellido">
+                    <h:outputText value="#{tblpers.apellido}" />
+                </p:column>
+
+                <p:column headerText="DNI">
+                    <h:outputText value="#{tblpers.dni}" />
+                </p:column>
+
+                <p:column headerText="Celular">
+                    <h:outputText value="#{tblpers.celular}" />
+                </p:column>
+
+                <p:column headerText="Email">
+                    <h:outputText value="#{tblpers.email}" />
+                </p:column>
+
+
+                <p:column headerText="Sexo">
+                    <h:outputText value="#{tblpers.sexo}" >
+                        <f:converter converterId="sexoConverter"/>
+                    </h:outputText>
+                </p:column>  
+
+
+                <p:column headerText="Cargo">
+
+                    <h:outputText value="#{tblpers.cargo}" />
+                </p:column>
+
+                <p:column headerText="Modificar">
+                    <p:commandButton oncomplete="PF('wdlgDatos').show();" value="Modificar" update=":dlgDatos">
+                        <f:setPropertyActionListener value="#{tblpers}" target="#{personaC.per}" />
+                    </p:commandButton>
+                </p:column>
+
+                <p:column headerText="Eliminar">
+                    <p:commandButton value="Eliminar" icon="ui_icon_trash" actionListener="#{personaC.eliminar(tblpers)}" update="tablaPer">
+                        <p:confirm header="Confirmación" message="¿Deseas eliminar?" icon="ui_icon_trash"/>
+                    </p:commandButton>
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+                    </p:confirmDialog>
+                </p:column>
+
+
+                <f:facet name="footer">
+                    EN TOTAL HAY#{fn:length(personaC.listadoPer)} REGISTROS.
+                </f:facet>
+            </p:dataTable>
+            <!--            Listado de la persona-->
+        </h:form>
+
+
+        <!--DATOS DE LA PERSONA-->
+        <p:dialog header="Datos de la persona" widgetVar="wdlgDatos" id="dlgDatos">
+            <p:panelGrid columns="2">
+                <p:outputLabel value="Nombre" />
+                <p:inputText value="#{personaC.per.nombre}" maxlength="30">
+                    <p:keyFilter regEx="/[A-Z_a-z_ñ_á_é_í_ó_ú_ ]/"/>
+                </p:inputText>
+
+
+                <p:outputLabel value="Apellido" />
+                <p:inputText value="#{personaC.per.apellido}" maxlength="30">
+                    <p:keyFilter regEx="/[A-Z_a-z_ñ_á_é_í_ó_ú_ ]/"/>
+                </p:inputText>
+
+                <p:outputLabel value="DNI" /> <p:inputText value="#{personaC.per.dni}" maxlength="8" >
+                    <p:keyFilter regEx="/[0-8]/" />
+                </p:inputText>                  
+
+                <p:outputLabel value="Celular" /> <p:inputText value="#{personaC.per.celular}" maxlength="9" >
+                    <p:keyFilter regEx="/[0-9]/" />
+                </p:inputText>  
+
+                <p:outputLabel value="Email" />
+                <p:inputText value="#{personaC.per.email}" maxlength="50">
+                    <p:keyFilter regEx="/[A-Z_a-z_ñ_á_é_í_ó_ú_0_:_@_._-]/"/>
+                </p:inputText>
+
+                <p:outputLabel value="Sexo" /><p:selectOneRadio id="sexo" value="#{personaC.per.sexo}" >
+                    <f:selectItem itemLabel="Masculino" itemValue="M" />
+                    <f:selectItem itemLabel="Femenino" itemValue="F" />
+                </p:selectOneRadio>
+
+                <p:outputLabel value="Cargo" />
+                <p:inputText value="#{personaC.per.cargo}" maxlength="30">
+                    <p:keyFilter regEx="/[A-Z_a-z_ñ_á_é_í_ó_ú_ ]/"/>
+                </p:inputText>
 
                 <p:commandButton value="Cancelar" immediate="true" oncomplete="PF('wdlgDatos').hide();" />
 
@@ -156,6 +188,7 @@
                     <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
                     <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
                 </p:confirmDialog>
+
             </p:panelGrid>
 
         </p:dialog>

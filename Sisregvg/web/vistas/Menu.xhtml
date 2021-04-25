@@ -1,0 +1,40 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+    <h:head>
+        <title>Menú</title>
+<!--        <f:event listener="#{personaC.listar()}" type="preRenderView" />-->
+    </h:head>
+    <h:body>      
+
+        <p:growl id="mensaje" showDetail="true" />
+        <p:growl id="growl-sticky" for="sticky-key" showDetail="true" sticky="true" />
+
+
+<!--        <p:breadCrumb>
+            <p:menuitem value="Categories" url="#" />
+            <p:menuitem value="Persona" url="http://localhost:8080/Sisregvg/faces/vistas/Persona.xhtml" />        
+        </p:breadCrumb>-->
+
+
+
+        <h:form>
+            <p:sidebar widgetVar="sidebar1" baseZIndex="10000">
+                <h1 style="font-weight:normal">MENU</h1>
+                <p:panelMenu style="width:300px">
+                    <p:submenu label="Persona">
+                        <p:menuitem value="Registrar Persona" outcome="/vistas/Persona"/>                                          
+                        
+                    </p:submenu>                                           
+                </p:panelMenu>
+                <p:commandButton value="Cancel" oncomplete="PF('sidebar1').hide()"/>
+            </p:sidebar>                
+            <p:commandButton icon="pi pi-arrow-right" oncomplete="PF('sidebar1').show()" />
+        </h:form>
+
+
+    </h:body>
+</html>

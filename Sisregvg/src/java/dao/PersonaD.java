@@ -5,16 +5,17 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-//import java.text.SimpleDateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import modelo.PersonaM;
+
 
 public class PersonaD extends Conexion implements ICRUD<PersonaM> {
 
     @Override
     public void registrar(PersonaM per) throws Exception {
-        // dni_per nom_per   nac_per  tel_per asig_mes   mes_per   obs_per
+    
         String sql = "insert into PERSONA (NOMPER,APEPER,DNIPER,CELPER,EMAPER,SEXPER,CARPER) values (?,?,?,?,?,?,?)";
         try {
             PreparedStatement ps = this.conectar().prepareStatement(sql);
@@ -35,35 +36,10 @@ public class PersonaD extends Conexion implements ICRUD<PersonaM> {
             this.cerrar();
         }
     }
-//
-//    @Override
-//    public void registrar(PersonaM per) throws Exception {
-//        try {
-//            this.conectar();
-//             String sql = "insert into PERSONA (NOMPER,APEPER,DNIPER,CELPER,EMAPER,SEXPER,CARPER) values (?,?,?,?,?,?,?)";
-//            PreparedStatement ps = this.getCnx().prepareStatement(sql);
-//            ps.setString(2, per.getApellido());
-//            ps.setString(3, per.getDni());
-//            ps.setString(4, per.getCelular());
-//            ps.setString(5, per.getEmail());
-//            ps.setString(6, per.getSexo());
-//            ps.setString(7, per.getCargo());
-//            ps.executeUpdate();
-//            ps.close();
-//       } catch (SQLException e) {
-//            System.out.println("Error en registrarAlumno " + e.getMessage());
-//            throw e;
-//        } finally {
-//            this.cerrar();
-//        }
-//    }
 
-
-    
-    
     @Override
     public void modificar(PersonaM per) throws Exception {
-        String sql = "update PERSONA set NOMPER=?, APEPER=?,DNIPER=?,CELPER=?,EMAPERr=?,SEXPER=?,CARPERr=?, where CODPER=? ";
+        String sql = "update PERSONA set NOMPER=?, APEPER=?,DNIPER=?,CELPER=?,EMAPERr=?,SEXPER=?,CARPER=?, where CODPER=? ";
         try {
             PreparedStatement ps = this.conectar().prepareStatement(sql);
             ps.setString(1, per.getNombre());
@@ -84,8 +60,8 @@ public class PersonaD extends Conexion implements ICRUD<PersonaM> {
     @Override
     public void eliminar(PersonaM per) throws Exception {
         String sql = "delete from PERSONA where CODPER=?";
-        try {
-            PreparedStatement ps = this.conectar().prepareStatement(sql);
+         try {
+            PreparedStatement ps = this.conectar().prepareStatement(sql);             
             ps.setInt(1, per.getCodigo());
             ps.executeUpdate();
             ps.close();
@@ -95,7 +71,7 @@ public class PersonaD extends Conexion implements ICRUD<PersonaM> {
             this.cerrar();
         }
     }
-    // dni_per nom_per   nac_per  tel_per asig_mes   mes_per   obs_per
+
 
     @Override
     public List listarTodos() throws Exception {
@@ -115,8 +91,7 @@ public class PersonaD extends Conexion implements ICRUD<PersonaM> {
                 pers.setCelular(rs.getString("CELPER"));
                 pers.setEmail(rs.getString("EMAPER"));
                 pers.setSexo(rs.getString("SEXPER"));
-                pers.setCargo(rs.getString("CARPER"));
-
+                pers.setCargo(rs.getString("CARPER"));   
                 listado.add(pers);
             }
             rs.close();
